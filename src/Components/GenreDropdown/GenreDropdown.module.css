@@ -1,0 +1,194 @@
+.genreDropdownWrapper {
+	position: relative;
+	display: inline-block;
+	z-index: 50;
+}
+
+/* Trigger button matching screenshot */
+.triggerButton {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	background-color: #000000;
+	color: #ffffff;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	padding: 6px 14px;
+	border-radius: 2px;
+	font-size: 14px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+	user-select: none;
+}
+
+.triggerButton:hover {
+	background-color: rgba(255, 255, 255, 0.12);
+	border-color: #ffffff;
+}
+
+.triggerButtonOpen {
+	border-color: #ffffff;
+	background-color: #141414;
+	box-shadow: 0 0 0 1px #ffffff;
+}
+
+.buttonText {
+	white-space: nowrap;
+	font-family: inherit;
+}
+
+.chevron {
+	color: #ffffff;
+	transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+	flex-shrink: 0;
+}
+
+.chevronOpen {
+	transform: rotate(180deg);
+}
+
+/* Dropdown Menu Panel */
+.dropdownMenu {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	width: 540px;
+	max-width: 90vw;
+	background-color: rgba(0, 0, 0, 0.95);
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95);
+	padding: 16px;
+	border-radius: 4px;
+	animation: dropdownFade 0.2s ease-out;
+	z-index: 100;
+}
+
+@keyframes dropdownFade {
+	from {
+		opacity: 0;
+		transform: translateY(-6px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.menuHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-bottom: 12px;
+	margin-bottom: 12px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.menuTitle {
+	font-size: 13px;
+	font-weight: 700;
+	color: #a3a3a3;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.resetBtn {
+	background: none;
+	border: none;
+	color: #e50914;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0;
+	transition: color 0.2s;
+}
+
+.resetBtn:hover {
+	color: #ff3333;
+	text-decoration: underline;
+}
+
+/* Multi-column Grid for Genres */
+.genresGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 6px;
+	max-height: 380px;
+	overflow-y: auto;
+	padding-right: 4px;
+}
+
+.genresGrid::-webkit-scrollbar {
+	width: 6px;
+}
+
+.genresGrid::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.genresGrid::-webkit-scrollbar-thumb {
+	background: rgba(255, 255, 255, 0.2);
+	border-radius: 3px;
+}
+
+.genresGrid::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.genreItem {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 6px;
+	padding: 8px 10px;
+	background-color: transparent;
+	border: none;
+	color: #e5e5e5;
+	font-size: 13px;
+	font-weight: 500;
+	text-align: left;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: background-color 0.15s, color 0.15s;
+	font-family: inherit;
+}
+
+.genreItem:hover {
+	background-color: rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+}
+
+.genreItemSelected {
+	background-color: rgba(229, 9, 20, 0.2);
+	color: #ffffff;
+	font-weight: 700;
+}
+
+.genreItemSelected .genreName {
+	color: #ffffff;
+	text-decoration: underline;
+}
+
+.checkIcon {
+	color: #e50914;
+	flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+	.dropdownMenu {
+		width: 320px;
+	}
+	.genresGrid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.dropdownMenu {
+		width: 260px;
+		left: 0;
+	}
+	.genresGrid {
+		grid-template-columns: 1fr;
+	}
+}

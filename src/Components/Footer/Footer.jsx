@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
-
 import styles from "./Footer.module.css";
 
 function Footer() {
+	const [serviceCode, setServiceCode] = useState(null);
+
 	const footerLinks = [
 		["Audio Description", "Investor Relations", "Legal Notices"],
 		["Help Centre", "Jobs", "Cookie Preferences"],
@@ -12,10 +13,10 @@ function Footer() {
 	];
 
 	const socialIcons = [
-		{ icon: <FaFacebookF />, label: "Facebook" },
-		{ icon: <FaInstagram />, label: "Instagram" },
-		{ icon: <FaTwitter />, label: "Twitter" },
-		{ icon: <FaYoutube />, label: "YouTube" },
+		{ icon: <FaFacebookF />, label: "Facebook", url: "https://facebook.com/netflix" },
+		{ icon: <FaInstagram />, label: "Instagram", url: "https://instagram.com/netflix" },
+		{ icon: <FaTwitter />, label: "Twitter", url: "https://twitter.com/netflix" },
+		{ icon: <FaYoutube />, label: "YouTube", url: "https://youtube.com/netflix" },
 	];
 
 	return (
@@ -25,7 +26,9 @@ function Footer() {
 				<div className={styles.socialLinks}>
 					{socialIcons.map((social) => (
 						<a
-							href="#"
+							href={social.url}
+							target="_blank"
+							rel="noopener noreferrer"
 							key={social.label}
 							className={styles.socialIcon}
 							aria-label={social.label}>
@@ -34,12 +37,12 @@ function Footer() {
 					))}
 				</div>
 
-				{/* Footer Links */}
+				{/* Footer Navigation Links */}
 				<div className={styles.linksContainer}>
-					{footerLinks.map((column, index) => (
-						<div className={styles.linkColumn} key={index}>
+					{footerLinks.map((column, colIdx) => (
+						<div className={styles.linkColumn} key={colIdx}>
 							{column.map((link) => (
-								<a href="#" key={link} className={styles.footerLink}>
+								<a href="#footer" key={link} className={styles.footerLink}>
 									{link}
 								</a>
 							))}
@@ -47,8 +50,21 @@ function Footer() {
 					))}
 				</div>
 
+				{/* Service Code Button */}
+				<div className={styles.serviceCodeSection}>
+					<button
+						className={styles.serviceCodeBtn}
+						onClick={() =>
+							setServiceCode(
+								serviceCode ? null : `${Math.floor(100 + Math.random() * 900)}-${Math.floor(100 + Math.random() * 900)}`
+							)
+						}>
+						{serviceCode ? `Service Code: ${serviceCode}` : "Service Code"}
+					</button>
+				</div>
+
 				{/* Copyright */}
-				<p className={styles.copyright}>© 1997-2026 Netflix, Inc.</p>
+				<p className={styles.copyright}>© 1997-2026 Netflix, Inc. Built with React & Vite.</p>
 			</div>
 		</footer>
 	);
