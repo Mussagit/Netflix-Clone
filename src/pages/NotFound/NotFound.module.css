@@ -1,0 +1,100 @@
+.notFoundContainer {
+	min-height: 100vh;
+	width: 100%;
+	background: url("../../assets/image/login.jpg") center center/cover no-repeat;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(
+		ellipse at center,
+		rgba(0, 0, 0, 0.5) 0%,
+		rgba(0, 0, 0, 0.9) 100%
+	);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.content {
+	text-align: center;
+	max-width: 620px;
+	padding: 40px;
+	color: #fff;
+	animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.title {
+	font-size: 3.5rem;
+	font-weight: 800;
+	margin: 0 0 16px 0;
+	text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+}
+
+.message {
+	font-size: 1.3rem;
+	color: #e5e5e5;
+	line-height: 1.5;
+	margin-bottom: 30px;
+}
+
+.homeBtn {
+	display: inline-block;
+	background-color: #ffffff;
+	color: #000000;
+	text-decoration: none;
+	font-size: 1.1rem;
+	font-weight: 700;
+	padding: 12px 32px;
+	border-radius: 4px;
+	transition: background-color 0.2s, transform 0.2s;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.homeBtn:hover {
+	background-color: rgba(255, 255, 255, 0.8);
+	transform: scale(1.04);
+}
+
+.errorCode {
+	margin-top: 40px;
+	border-left: 2px solid #e50914;
+	display: inline-block;
+	padding: 4px 12px;
+	font-size: 1.1rem;
+	color: #aaa;
+}
+
+.errorCode strong {
+	color: #fff;
+	letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+	.title {
+		font-size: 2.2rem;
+	}
+	.message {
+		font-size: 1.05rem;
+	}
+}

@@ -1,4 +1,13 @@
-.mainWrapper {
-	padding-left: 2%;
-	background-color: black;
+.rowsWrapper {
+	position: relative;
+	background-color: #141414;
+	margin-top: 0;
+	z-index: 10;
+	padding-bottom: 50px;
+}
+
+@media (max-width: 768px) {
+	.rowsWrapper {
+		margin-top: 0;
+	}
 }

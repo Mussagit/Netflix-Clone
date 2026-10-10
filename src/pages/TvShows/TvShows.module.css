@@ -1,0 +1,137 @@
+.tvContainer {
+	background-color: #141414;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.subHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 4%;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	position: relative;
+	z-index: 20;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.leftSubHeader {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	flex-wrap: wrap;
+}
+
+.pageTitle {
+	font-size: 2.2rem;
+	font-weight: 800;
+	color: #fff;
+	margin: 0;
+	white-space: nowrap;
+}
+
+/* View Mode Toggles */
+.viewToggleGroup {
+	display: flex;
+	align-items: center;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: 2px;
+	overflow: hidden;
+	background-color: #000;
+}
+
+.viewBtn {
+	background: transparent;
+	border: none;
+	color: #777;
+	padding: 7px 12px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s;
+}
+
+.viewBtn:hover {
+	color: #fff;
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.viewBtnActive {
+	color: #fff;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+.rowsContent {
+	position: relative;
+	background-color: #141414;
+	padding-bottom: 60px;
+	margin-top: 10px;
+}
+
+/* Grid View Container */
+.gridViewContainer {
+	padding: 0 4% 80px;
+	position: relative;
+	z-index: 10;
+}
+
+.gridHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 24px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	padding-bottom: 12px;
+}
+
+.gridHeader h2 {
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: #fff;
+	margin: 0;
+}
+
+.clearFilterLink {
+	background: none;
+	border: none;
+	color: #e50914;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+.clearFilterLink:hover {
+	color: #ff3333;
+	text-decoration: underline;
+}
+
+.tvGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 30px 16px;
+}
+
+.gridItem {
+	position: relative;
+	transition: transform 0.25s ease;
+}
+
+@media (max-width: 768px) {
+	.subHeader {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 14px;
+		margin-top: 10px;
+	}
+	.pageTitle {
+		font-size: 1.6rem;
+	}
+	.tvGrid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 20px 10px;
+	}
+}

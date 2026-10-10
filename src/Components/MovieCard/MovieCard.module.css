@@ -1,49 +1,90 @@
 .cardWrapper {
 	position: relative;
-	width: 290px;
-	height: 198px;
+	width: 100%;
+	height: 140px;
 	cursor: pointer;
+	border-radius: 6px;
 	transition: transform 0.3s ease;
-	overflow: visible;
-	z-index: 1;
+	display: flex;
+	align-items: center;
+}
+
+.largeCardWrapper {
+	height: 280px;
 }
 
 .poster {
-	width: 227px;
-	height: 128px;
+	width: 100%;
+	height: 100%;
 	border-radius: 6px;
 	object-fit: cover;
+	display: block;
 	transition: transform 0.3s ease;
-	position: relative;
-	z-index: 2;
 }
 
+.largePoster {
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Red Top 10 Corner Badge matching Screenshot 5 */
+.topTenPill {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	background-color: #e50914;
+	color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2px 4px;
+	border-radius: 2px;
+	font-size: 8px;
+	font-weight: 900;
+	line-height: 0.95;
+	letter-spacing: 0.5px;
+	z-index: 2;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+	pointer-events: none;
+}
+
+/* Rank Number for Top 10 */
+.rankBadge {
+	position: absolute;
+	left: -25px;
+	bottom: 0;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.rankNumber {
+	font-size: 110px;
+	font-weight: 900;
+	color: #000;
+	-webkit-text-stroke: 3px #595959;
+	line-height: 0.8;
+	font-family: Impact, "Arial Black", sans-serif;
+	letter-spacing: -6px;
+}
+
+/* Hover Preview Card */
 .hoverCard {
 	position: absolute;
 	top: -50px;
 	left: 50%;
-	transform: translateX(-50%) scale(0.95);
-	width: 320px;
-	min-height: 305px;
-	height: auto;
-	background: #111;
-	border-radius: 8px;
-	overflow: visible;
-	box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.8);
-
-	/* hidden by default */
+	transform: translateX(-50%) scale(0.9);
+	width: 290px;
+	background-color: #181818;
+	border-radius: 6px;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.95);
 	opacity: 0;
 	visibility: hidden;
-	transition:
-		opacity 0.3s ease,
-		visibility 0.3s ease,
-		transform 0.3s ease;
-
-	/* optimization */
-	will-change: transform, opacity;
-	backface-visibility: hidden;
+	transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+	z-index: 1000;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	overflow: hidden;
 	pointer-events: none;
-	z-index: 999999;
 }
 
 .cardWrapper:hover .hoverCard {
@@ -53,95 +94,128 @@
 	pointer-events: auto;
 }
 
-.hoverCard:hover {
-	opacity: 1;
-	visibility: visible;
-	transform: scale(1);
-	pointer-events: auto;
+.hoverImageWrap {
+	position: relative;
+	width: 100%;
+	height: 140px;
+	cursor: pointer;
 }
 
 .hoverImage {
 	width: 100%;
-	height: 130px;
+	height: 100%;
 	object-fit: cover;
-	border-radius: 8px 8px 0 0;
+}
+
+.hoverPlayOverlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+.hoverImageWrap:hover .hoverPlayOverlay {
+	opacity: 1;
 }
 
 .badge {
-	background: red;
-	color: white;
-	font-size: 12px;
-	padding: 2px 8px;
-	border-radius: 4px;
-	display: inline-block;
-	margin: 10px 0 0 12px;
-	font-weight: 500;
+	position: absolute;
+	bottom: 8px;
+	left: 8px;
+	background-color: #e50914;
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 2px 6px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.hoverBody {
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
 }
 
 .buttonsRow {
 	display: flex;
-	gap: 8px;
-	margin: 12px;
 	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
 }
 
-.circleButton {
-	cursor: pointer;
-	border-radius: 50%;
-	transition:
-		transform 0.2s ease,
-		opacity 0.2s ease;
-}
-
-.circleButton:hover {
-	transform: scale(1.1);
-	opacity: 0.85;
-}
-
-.circleButtonSmall {
-	border-radius: 50%;
-	background: rgba(34, 34, 34, 0.8);
-	border: 1px solid #555;
-	color: white;
-	font-size: 16px;
-	cursor: pointer;
+.playBtn,
+.iconBtn,
+.dropdownBtn {
+	background: none;
+	border: none;
+	padding: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin-left: auto;
-	transition:
-		background 0.2s ease,
-		border-color 0.2s ease,
-		transform 0.2s ease;
+	cursor: pointer;
+	transition: transform 0.2s, opacity 0.2s;
 }
 
-.circleButtonSmall:hover {
-	background: #333;
-	border-color: #777;
-	transform: scale(1.05);
+.playBtn:hover,
+.iconBtn:hover,
+.dropdownBtn:hover {
+	transform: scale(1.15);
+	opacity: 0.85;
+}
+
+.dropdownBtn {
+	margin-left: auto;
+}
+
+.movieTitle {
+	font-size: 14px;
+	font-weight: 700;
+	color: #fff;
+	margin: 0 0 6px 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .metaRow {
-	color: white;
 	display: flex;
-	gap: 10px;
-	margin: 8px 12px;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.dot {
-	color: #888;
-	margin: 0 4px;
-}
-
-.genres {
-	color: #bbb;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 8px;
 	font-size: 13px;
-	margin: 6px 12px 12px 12px;
-	line-height: 1.4;
+}
+
+.match {
+	color: #46d369;
+	font-weight: 700;
 }
 
 .tag {
-	color: #ddd;
+	border: 1px solid rgba(255, 255, 255, 0.4);
+	padding: 1px 5px;
+	font-size: 11px;
+	color: #ccc;
+	border-radius: 2px;
+}
+
+.genres {
+	color: #a3a3a3;
+	font-size: 12px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+
+.dot {
+	color: #666;
+	margin: 0 2px;
 }

@@ -1,0 +1,179 @@
+.container {
+	background-color: #141414;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.content {
+	position: relative;
+	background-color: #141414;
+	padding-bottom: 60px;
+	margin-top: 0;
+	z-index: 10;
+}
+
+.sectionHeader {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 0 4%;
+	margin-top: 24px;
+}
+
+.sectionTitle {
+	font-size: 1.5rem;
+	font-weight: 800;
+	color: #fff;
+	margin: 0;
+}
+
+/* Upcoming Worth The Wait Grid */
+.upcomingGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 24px;
+	padding: 16px 4% 36px;
+}
+
+.upcomingCard {
+	background-color: #1a1a1a;
+	border-radius: 8px;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	flex-direction: column;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.upcomingCard:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+}
+
+.upcomingThumb {
+	position: relative;
+	width: 100%;
+	height: 220px;
+	cursor: pointer;
+}
+
+.upcomingThumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.dateTag {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	font-size: 12px;
+	font-weight: 600;
+	padding: 4px 10px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.upcomingDetails {
+	padding: 18px 20px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+}
+
+.upcomingTopRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.upcomingTitle {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #fff;
+	margin: 0;
+}
+
+.remindBtn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	background-color: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #fff;
+	padding: 6px 14px;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.2s;
+	white-space: nowrap;
+}
+
+.remindBtn:hover {
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+.remindBtnActive {
+	background-color: #e50914;
+	border-color: #e50914;
+	color: #fff;
+}
+
+.upcomingOverview {
+	font-size: 13px;
+	color: #b3b3b3;
+	line-height: 1.5;
+	margin: 0 0 16px 0;
+	flex: 1;
+}
+
+.upcomingFooter {
+	display: flex;
+	gap: 12px;
+}
+
+.trailerBtn {
+	background-color: #fff;
+	color: #000;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.trailerBtn:hover {
+	background-color: rgba(255, 255, 255, 0.75);
+}
+
+.moreInfoBtn {
+	background-color: transparent;
+	color: #ccc;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	padding: 8px 16px;
+	border-radius: 4px;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.moreInfoBtn:hover {
+	color: #fff;
+	border-color: #fff;
+}
+
+@media (max-width: 900px) {
+	.upcomingGrid {
+		grid-template-columns: 1fr;
+	}
+}

@@ -1,110 +1,342 @@
-import KillerSally from '../assets/image/10061.jpg'
-import Pepsi from '../assets/image/10066.jpg'
-import FitForTv from '../assets/image/10067.jpg'
-import champion from '../assets/image/10079.jpg'
-import TheArt from '../assets/image/10072.jpg'
-import coldStorage from '../assets/image/coldStorage.webp'
-import hamnet from '../assets/image/hamnet.webp'
-import hoppers from '../assets/image/hoppers.webp'
-import marshals from '../assets/image/marshals.webp'
-import monarch from '../assets/image/monarchLegacyOfMonsters.webp'
-import pursuit from '../assets/image/pursuitOfJade.webp'
-import scream from '../assets/image/pursuitOfJade.webp'
-import TheBride from '../assets/image/TheBride.webp'
-import Vladimir from '../assets/image/vladimir.webp'
-import YoungSherlock from '../assets/image/youngSherlock.webp'
+import KillerSally from "../assets/image/10061.jpg";
+import Pepsi from "../assets/image/10066.jpg";
+import FitForTv from "../assets/image/10067.jpg";
+import champion from "../assets/image/10079.jpg";
+import TheArt from "../assets/image/10072.jpg";
+import coldStorage from "../assets/image/coldStorage.webp";
+import hamnet from "../assets/image/hamnet.webp";
+import hoppers from "../assets/image/hoppers.webp";
+import marshals from "../assets/image/marshals.webp";
+import monarch from "../assets/image/monarchLegacyOfMonsters.webp";
+import pursuit from "../assets/image/pursuitOfJade.webp";
+import scream from "../assets/image/scream7.webp";
+import TheBride from "../assets/image/TheBride.webp";
+import Vladimir from "../assets/image/vladimir.webp";
+import YoungSherlock from "../assets/image/youngSherlock.webp";
+import bannerImg from "../assets/image/banner.jpeg";
 
-export const movies = [
-  {
-    id: 1,
-    title: "Monarch",
-    poster_path: monarch,
-    matureRating: "U/A 16+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Action", "Thriller", "Adventure"],
-    badge: "Recently added"
-  },
-  {
-    id: 2,
-    title: "Killer Sally",
-    poster_path: KillerSally,
-    matureRating: "U/A 16+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Crime", "Drama", "Thriller"],
-    badge: "Recently added"
-  },
-  {
-    id: 3,
-    title: "Pepsi",
-    poster_path: Pepsi,
-    matureRating: "U/A 16+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Sci-Fi", "Thriller", "Action"],
-    badge: "Recently added"
-  },
-  {
-    id: 4,
-    title: "Fit For Tv",
-    poster_path: FitForTv,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-  {
-    id: 5,
-    title: "Champion",
-    poster_path: champion,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-  {
-    id: 6,
-    title: "Damsel",
-    poster_path: TheArt,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-  {
-    id: 7,
-    title: "Cold Storage",
-    poster_path: coldStorage,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-  {
-    id: 8,
-    title: "Hamnet",
-    poster_path: hamnet,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-   {
-    id: 9,
-    title: "Marshals",
-    poster_path: marshals,
-    matureRating: "U/A 13+",
-    category: "Movie",
-    quality: "HD",
-    genres: ["Adventure", "Fantasy"],
-    badge: "Recently added"
-  },
-
-  
+export const fallbackMovies = [
+	{
+		id: 101,
+		title: "Monarch: Legacy of Monsters",
+		name: "Monarch: Legacy of Monsters",
+		overview:
+			"Following the thunderous battle between Godzilla and the Titans that leveled San Francisco, two siblings embark on an international journey to uncover their family's connection to the secret organization known as Monarch.",
+		poster_path: monarch,
+		backdrop_path: monarch,
+		localPoster: monarch,
+		localBackdrop: monarch,
+		matureRating: "U/A 16+",
+		category: "TV Series",
+		quality: "4K Ultra HD",
+		vote_average: 8.7,
+		matchScore: "98% Match",
+		release_date: "2024-01-12",
+		first_air_date: "2024-01-12",
+		duration: "1 Season",
+		genres: ["Action", "Sci-Fi", "Adventure"],
+		badge: "Top 10",
+		trailerKey: "eczbNfX5FqE",
+	},
+	{
+		id: 102,
+		title: "The Bride!",
+		name: "The Bride!",
+		overview:
+			"A lonely Frankenstein travels to 1930s Chicago to seek the aid of a Dr. Euphronius in creating a companion for himself. The two invigorate a murdered young woman and the Bride is born.",
+		poster_path: TheBride,
+		backdrop_path: TheBride,
+		localPoster: TheBride,
+		localBackdrop: TheBride,
+		matureRating: "18+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 8.4,
+		matchScore: "96% Match",
+		release_date: "2025-10-03",
+		duration: "2h 14m",
+		genres: ["Horror", "Drama", "Romance"],
+		badge: "New Release",
+		trailerKey: "jba_W243mU8",
+	},
+	{
+		id: 103,
+		title: "Young Sherlock",
+		name: "Young Sherlock",
+		overview:
+			"An irreverent, action-packed origin story of Sir Arthur Conan Doyle's beloved detective in an explosive re-imagining of this iconic character, unravelling a globe-trotting conspiracy that changes his life forever.",
+		poster_path: YoungSherlock,
+		backdrop_path: YoungSherlock,
+		localPoster: YoungSherlock,
+		localBackdrop: YoungSherlock,
+		matureRating: "U/A 13+",
+		category: "TV Series",
+		quality: "4K Ultra HD",
+		vote_average: 8.9,
+		matchScore: "99% Match",
+		release_date: "2025-06-18",
+		first_air_date: "2025-06-18",
+		duration: "8 Episodes",
+		genres: ["Mystery", "Crime", "Action"],
+		badge: "Trending",
+		trailerKey: "V0Fqdb-smqo",
+	},
+	{
+		id: 104,
+		title: "Cold Storage",
+		name: "Cold Storage",
+		overview:
+			"Several decades ago, a highly infectious, constantly mutating microorganism was contained in a military facility. When the facility is bought by a self-storage company, temperatures rise and the organism escapes.",
+		poster_path: coldStorage,
+		backdrop_path: coldStorage,
+		localPoster: coldStorage,
+		localBackdrop: coldStorage,
+		matureRating: "16+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 7.9,
+		matchScore: "94% Match",
+		release_date: "2024-11-20",
+		duration: "1h 58m",
+		genres: ["Sci-Fi", "Thriller", "Action"],
+		badge: "Recently Added",
+		trailerKey: "mqqft2x_Aa4",
+	},
+	{
+		id: 105,
+		title: "Scream 7",
+		name: "Scream 7",
+		overview:
+			"The Ghostface killings return with higher stakes, bloodier confrontations, and an unexpected mystery that tests the surviving legacy.",
+		poster_path: scream,
+		backdrop_path: scream,
+		localPoster: scream,
+		localBackdrop: scream,
+		matureRating: "18+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 8.1,
+		matchScore: "92% Match",
+		release_date: "2026-02-27",
+		duration: "2h 05m",
+		genres: ["Horror", "Mystery", "Thriller"],
+		badge: "Coming Soon",
+		trailerKey: "h74AX9J8pd4",
+	},
+	{
+		id: 106,
+		title: "Hamnet",
+		name: "Hamnet",
+		overview:
+			"The poignant human story behind the creation of Shakespeare's most famous play, Hamlet, focusing on the emotional bond between Agnes and her family during devastating loss.",
+		poster_path: hamnet,
+		backdrop_path: hamnet,
+		localPoster: hamnet,
+		localBackdrop: hamnet,
+		matureRating: "U/A 13+",
+		category: "Movie",
+		quality: "4K Ultra HD",
+		vote_average: 9.1,
+		matchScore: "97% Match",
+		release_date: "2025-12-10",
+		duration: "2h 10m",
+		genres: ["Drama", "Historical", "Biography"],
+		badge: "Award Winner",
+		trailerKey: "L6P3nI6VnlY",
+	},
+	{
+		id: 107,
+		title: "Marshals",
+		name: "Marshals",
+		overview:
+			"An elite squad of federal marshals hunts down America's most elusive fugitives across treacherous terrain and perilous borders.",
+		poster_path: marshals,
+		backdrop_path: marshals,
+		localPoster: marshals,
+		localBackdrop: marshals,
+		matureRating: "16+",
+		category: "TV Series",
+		quality: "HD",
+		vote_average: 8.3,
+		matchScore: "93% Match",
+		release_date: "2025-08-15",
+		first_air_date: "2025-08-15",
+		duration: "2 Seasons",
+		genres: ["Action", "Crime", "Drama"],
+		badge: "Popular",
+		trailerKey: "d9MyW72ELq0",
+	},
+	{
+		id: 108,
+		title: "Hoppers",
+		name: "Hoppers",
+		overview:
+			"An inventive human mind is transferred into a robotic beaver in order to infiltrate animal kingdom societies and spark an unexpected revolution.",
+		poster_path: hoppers,
+		backdrop_path: hoppers,
+		localPoster: hoppers,
+		localBackdrop: hoppers,
+		matureRating: "All",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 8.6,
+		matchScore: "95% Match",
+		release_date: "2026-03-06",
+		duration: "1h 44m",
+		genres: ["Animation", "Family", "Comedy"],
+		badge: "Family Favorite",
+		trailerKey: "7TavVZMewpY",
+	},
+	{
+		id: 109,
+		title: "Vladimir",
+		name: "Vladimir",
+		overview:
+			"A thrilling psychological deep dive into high stakes power dynamics, espionage secrets, and global intrigue.",
+		poster_path: Vladimir,
+		backdrop_path: Vladimir,
+		localPoster: Vladimir,
+		localBackdrop: Vladimir,
+		matureRating: "18+",
+		category: "TV Series",
+		quality: "4K Ultra HD",
+		vote_average: 8.0,
+		matchScore: "91% Match",
+		release_date: "2024-09-14",
+		duration: "6 Episodes",
+		genres: ["Thriller", "Drama"],
+		badge: "Top Rated",
+		trailerKey: "dQw4w9WgXcQ",
+	},
+	{
+		id: 110,
+		title: "Pursuit of Jade",
+		name: "Pursuit of Jade",
+		overview:
+			"A high-stakes artifact heist in the neon-lit criminal underworld of Macau tests friendships and loyalties to their breaking point.",
+		poster_path: pursuit,
+		backdrop_path: pursuit,
+		localPoster: pursuit,
+		localBackdrop: pursuit,
+		matureRating: "16+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 8.2,
+		matchScore: "90% Match",
+		release_date: "2025-04-11",
+		duration: "2h 02m",
+		genres: ["Action", "Thriller", "Crime"],
+		badge: "Trending",
+		trailerKey: "V0Fqdb-smqo",
+	},
+	{
+		id: 111,
+		title: "Killer Sally",
+		name: "Killer Sally",
+		overview:
+			"A true crime documentary about national bodybuilding champion Sally McNeil, her turbulent marriage, and the Valentine's Day murder that shocked the fitness world.",
+		poster_path: KillerSally,
+		backdrop_path: KillerSally,
+		localPoster: KillerSally,
+		localBackdrop: KillerSally,
+		matureRating: "18+",
+		category: "Docuseries",
+		quality: "HD",
+		vote_average: 7.8,
+		matchScore: "89% Match",
+		release_date: "2022-11-02",
+		duration: "3 Episodes",
+		genres: ["Documentary", "Crime", "Biography"],
+		badge: "Docuseries",
+		trailerKey: "f8j1d7s3n90",
+	},
+	{
+		id: 112,
+		title: "Pepsi, Where's My Jet?",
+		name: "Pepsi, Where's My Jet?",
+		overview:
+			"A 20-year-old college student attempts to win a military Harrier fighter jet in a Pepsi sweepstakes commercial, kicking off a legendary David-versus-Goliath legal battle.",
+		poster_path: Pepsi,
+		backdrop_path: Pepsi,
+		localPoster: Pepsi,
+		localBackdrop: Pepsi,
+		matureRating: "13+",
+		category: "Docuseries",
+		quality: "HD",
+		vote_average: 8.5,
+		matchScore: "94% Match",
+		release_date: "2022-11-17",
+		duration: "4 Episodes",
+		genres: ["Documentary", "Comedy", "History"],
+		badge: "Must Watch",
+		trailerKey: "dQw4w9WgXcQ",
+	},
+	{
+		id: 113,
+		title: "Fit For TV",
+		name: "Fit For TV",
+		overview:
+			"Behind the glamorous cameras of reality television, contestants discover the high psychological cost of 24/7 fame and scrutiny.",
+		poster_path: FitForTv,
+		backdrop_path: FitForTv,
+		localPoster: FitForTv,
+		localBackdrop: FitForTv,
+		matureRating: "16+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 7.7,
+		matchScore: "88% Match",
+		release_date: "2023-05-19",
+		duration: "1h 45m",
+		genres: ["Drama", "Comedy"],
+		badge: "Trending",
+		trailerKey: "V0Fqdb-smqo",
+	},
+	{
+		id: 114,
+		title: "The Champion",
+		name: "The Champion",
+		overview:
+			"A hot-headed soccer prodigy and an isolated intellectual tutor forge an unconventional friendship that transforms both of their lives.",
+		poster_path: champion,
+		backdrop_path: champion,
+		localPoster: champion,
+		localBackdrop: champion,
+		matureRating: "13+",
+		category: "Movie",
+		quality: "HD",
+		vote_average: 8.0,
+		matchScore: "91% Match",
+		release_date: "2024-07-12",
+		duration: "1h 52m",
+		genres: ["Drama", "Sport"],
+		badge: "Feel-Good",
+		trailerKey: "dQw4w9WgXcQ",
+	},
+	{
+		id: 115,
+		title: "Damsel",
+		name: "Damsel",
+		overview:
+			"A dutiful damsel agrees to marry a handsome prince, only to find the royal family has recruited her as a sacrifice to repay an ancient debt. Thrown into a cave with a fire-breathing dragon, she must rely on her wits and will to survive.",
+		poster_path: TheArt,
+		backdrop_path: bannerImg,
+		localPoster: TheArt,
+		localBackdrop: bannerImg,
+		matureRating: "13+",
+		category: "Movie",
+		quality: "4K Ultra HD",
+		vote_average: 8.8,
+		matchScore: "98% Match",
+		release_date: "2024-03-08",
+		duration: "1h 50m",
+		genres: ["Fantasy", "Action", "Adventure"],
+		badge: "Blockbuster",
+		trailerKey: "bp_4Y57jT7g",
+	},
 ];
+
+export const movies = fallbackMovies;
+export const defaultBannerMovie = fallbackMovies[0];
+
+export default fallbackMovies;

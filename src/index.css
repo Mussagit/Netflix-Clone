@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+:root {
+	--netflix-red: #e50914;
+	--netflix-red-hover: #f40612;
+	--netflix-black: #141414;
+	--netflix-dark: #181818;
+	--netflix-card-bg: #1e1e1e;
+	--netflix-gray: #808080;
+	--netflix-light-gray: #e5e5e5;
+	--netflix-match-green: #46d369;
+	--font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	--transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	background-color: var(--netflix-black);
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: var(--netflix-black);
+	color: #ffffff;
+	font-family: var(--font-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
+}
+
+/* Custom Netflix Scrollbar (T-05) */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--netflix-black);
+}
+
+::-webkit-scrollbar-thumb {
+	background: #333333;
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--netflix-red);
+}
+
+/* Firefox Scrollbar */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: #333333 var(--netflix-black);
+}
+
+button {
+	font-family: inherit;
+}
+
+a {
+	color: inherit;
+}
+
+img {
+	user-select: none;
+	-webkit-user-drag: none;
+}
