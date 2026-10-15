@@ -1,29 +1,20 @@
 {
-  "name": "netflix",
+  "name": "netflix-clone-workspace",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "description": "Netflix Full-Stack Monorepo — Production Architecture with React 19 Frontend and Node.js/Express Backend",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "axios": "^1.19.0",
-    "dotenv": "^17.4.2",
-    "lucide-react": "^1.33.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-icons": "^5.7.0",
-    "react-router-dom": "^7.18.2",
-    "swiper": "^14.1.0"
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,red\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build --prefix frontend",
+    "build:frontend": "npm run build --prefix frontend",
+    "start": "npm start --prefix backend",
+    "start:backend": "npm start --prefix backend",
+    "install:all": "npm install --prefix frontend && npm install --prefix backend",
+    "lint": "npm run lint --prefix frontend"
   },
   "devDependencies": {
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "oxlint": "^1.75.0",
-    "vite": "^8.2.0"
+    "concurrently": "^9.2.5"
   }
 }

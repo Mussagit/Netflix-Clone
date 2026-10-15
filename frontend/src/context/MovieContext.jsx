@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import movieInstance from "../Utility/MovieInstance";
-import requests, { BACKEND_BASE_URL } from "../Utility/requestUrls";
+import requests, { BACKEND_BASE_URL, BACKEND_ROOT_URL } from "../Utility/requestUrls";
 import { fallbackMovies } from "../Data/Data";
 
 const MovieContext = createContext();
@@ -55,7 +55,7 @@ export function MovieProvider({ children }) {
 		let isMounted = true;
 		async function checkBackendAndSync() {
 			try {
-				const healthRes = await axios.get("http://localhost:5000/", { timeout: 3000 });
+				const healthRes = await axios.get(`${BACKEND_ROOT_URL}/`, { timeout: 3000 });
 				if (healthRes.status === 200 && isMounted) {
 					setBackendConnected(true);
 					// If token exists, sync remote watchlist

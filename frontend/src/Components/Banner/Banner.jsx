@@ -91,9 +91,16 @@ function Banner({ categoryUrl }) {
 					</button>
 
 					<button
+						className={styles.infoButton}
+						onClick={() => openDetail(movie)}>
+						<Info size={20} />
+						<span>More Info</span>
+					</button>
+
+					<button
 						className={styles.myListButton}
 						onClick={() => toggleMyList(movie)}>
-						{inList ? <Check size={20} /> : <Info size={20} />}
+						{inList ? <Check size={20} /> : <Plus size={20} />}
 						<span>My List</span>
 					</button>
 				</div>

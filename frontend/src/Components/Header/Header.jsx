@@ -10,9 +10,7 @@ import {
 	Menu,
 	Play,
 	Film,
-	Smile,
 	LogOut,
-	LogIn,
 } from "lucide-react";
 import { useMovie } from "../../context/MovieContext";
 import { TMDB_THUMBNAIL_BASE } from "../../Utility/requestUrls";
@@ -445,6 +443,36 @@ function Header() {
 												{currentUser?.email || "Signed In"}
 											</span>
 										</div>
+									</div>
+									<div className={styles.switchProfilesList}>
+										{profiles.map((p) => (
+											<button
+												key={p.id}
+												className={styles.profileMenuItem}
+												style={{
+													fontWeight: activeProfile?.id === p.id ? "700" : "400",
+												}}
+												onClick={() => {
+													switchProfile(p);
+													setIsProfileOpen(false);
+												}}>
+												<div
+													style={{
+														width: "22px",
+														height: "22px",
+														borderRadius: "4px",
+														backgroundColor: p.avatarColor,
+														display: "inline-flex",
+														alignItems: "center",
+														justifyContent: "center",
+														marginRight: "8px",
+														verticalAlign: "middle",
+													}}>
+													<User size={13} color="#ffffff" />
+												</div>
+												<span>{p.name}</span>
+											</button>
+										))}
 									</div>
 									<hr className={styles.profileMenuDivider} />
 									<button
