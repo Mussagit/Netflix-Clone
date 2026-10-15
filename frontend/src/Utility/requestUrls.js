@@ -9,6 +9,7 @@ export const TMDB_THUMBNAIL_BASE = "https://image.tmdb.org/t/p/w300";
 
 export const BACKEND_BASE_URL =
 	import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+export const BACKEND_ROOT_URL = BACKEND_BASE_URL.replace(/\/api\/?$/, "");
 
 const requests = {
 	apiKey: API_KEY,

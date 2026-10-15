@@ -12,7 +12,6 @@ import {
 	Camera,
 	Upload,
 	Trash2,
-	Image as ImageIcon,
 } from "lucide-react";
 import { useMovie } from "../../context/MovieContext";
 import styles from "./AccountModal.module.css";

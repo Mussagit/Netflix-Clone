@@ -7,19 +7,32 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/node_modules/
 
-# Editor directories and files
+# Production Build Output
+dist/
+dist-ssr/
+frontend/dist/
+.vite/
+
+# Environment Variables & Local Data
+.env
+.env.local
+frontend/.env
+backend/.env
+backend/netflix.db.json
+
+# Editor & System Files
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-.env

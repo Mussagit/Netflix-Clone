@@ -1,183 +1,184 @@
-# Netflix Clone
+# 🎬 Netflix Clone — Full-Stack Monorepo
 
-A fully responsive Netflix-inspired streaming UI built with React and Vite, powered by the [TMDB API](https://www.themoviedb.org/documentation/api).
+[![React](https://img.shields.io/badge/React-19.2-blue.svg)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8.2-purple.svg)](https://vite.dev/)
+[![Node](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Express](https://img.shields.io/badge/Express-4.21-lightgrey.svg)](https://expressjs.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
+[![Gemini](https://img.shields.io/badge/Google_Gemini-1.5_Flash-4285F4.svg)](https://ai.google.dev/)
+[![License](https://img.shields.io/badge/License-ISC-brightgreen.svg)]()
 
----
-
-## Features
-
-# Routing Flow
-
-```mermaid
-flowchart TD
-    A[main.jsx: BrowserRouter] --> B[App.jsx: Routes]
-    B -->|path=/| C[Layout.jsx]
-    C --> D[Header.jsx]
-    C --> E["Outlet (page content)"]
-    C --> F[Footer.jsx]
-    D -->|NavLink clicks change URL| B
-    E -->|matched child route| G[Home / TvShows / Movies / etc.]
-    G -->|Back to Home Link| B
-```
-
-- **Dynamic Banner** — randomly selects a Netflix Original on every page load with a backdrop image, title, description, and action buttons
-- **Multi-category movie rows** — Trending, Popular on Netflix, Top Rated, Action, Comedy, Horror, Romance, and Documentaries fetched in parallel
-- **Swiper carousel** — smooth horizontal slide-show rows with hover-reveal navigation arrows and fully responsive breakpoints
-- **Movie card hover preview** — expands on hover to show poster, match score, title, action buttons, metadata tags, and real genre names from TMDB
-- **Scroll-aware header** — transparent gradient at top, solid dark background after 50px scroll, with backdrop blur
-- **Expandable pill search** — search bar animates from icon to full pill input on click
-- **Profile dropdown** — animated slide-down menu
-- **Mobile hamburger nav** — full-screen drawer navigation on small screens
-- **Page routes** — Home, TV Shows, Movies, New & Popular, My List, Browse by Languages, 404
-- **Loading & error states** — Netflix-red spinner while fetching, user-facing error message on failure
-- **Image fallback** — broken poster images gracefully replaced with a placeholder
+An enterprise-ready, production-grade Netflix full-stack streaming web application. Engineered with a decoupled **Frontend (React 19 + Vite)** and **Backend (Node.js + Express + MySQL + Google Gemini AI)** architecture, optimized for scalability, resilience, and 1-click cloud deployment.
 
 ---
 
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | React 19 |
-| Build tool | Vite 8 |
-| Routing | React Router DOM 7 |
-| HTTP client | Axios |
-| Carousel | Swiper 14 |
-| Icons | Lucide React + React Icons |
-| Styling | CSS Modules |
-| Linting | Oxlint |
-| Data source | TMDB API v3 |
-
----
-
-## Project Structure
+## 🏗️ Professional Architecture Overview
 
 ```
-src/
-├── assets/image/          # Logo, banner fallback, and movie images
-├── Components/
-│   ├── Banner/            # Hero banner with random Netflix Original
-│   ├── DetailModal/       # Movie info popup with synopsis & recommendations
-│   ├── DisplayRow/        # Parallel-fetches all categories, renders SlideShow rows
-│   ├── Footer/            # Social links, footer navigation, copyright
-│   ├── Header/            # Fixed nav with search, notifications, profile dropdown
-│   ├── Layout/            # Shell: Header + Outlet + Footer
-│   ├── MovieCard/         # Poster card with hover preview, dynamic genres & match score
-│   ├── SlideShow/         # Swiper carousel wrapper
-│   └── TrailerModal/      # Live YouTube video trailer popup
-├── context/
-│   └── MovieContext.jsx   # Global state for My List, Modals, Search, & Profiles
-├── Data/
-│   └── Data.js            # Static movie data reference & offline fallback
-├── pages/
-│   ├── Home/              # Banner + all movie category rows
-│   ├── TvShows/           # TV Series banner + genre filter + TV rows
-│   ├── Movies/            # Movies banner + genre filter + movie rows
-│   ├── NewsAndPopular/    # Top 10 Today + Fresh Releases + Worth the Wait
-│   ├── MyList/            # Watchlist with localStorage sync, filters & sorting
-│   ├── BrowseByLanguage/  # Multi-language discovery (Korean, Spanish, Hindi, etc.)
-│   └── NotFound/          # 404 page
-└── Utility/
-    ├── MovieInstance.js   # Axios instance with TMDB base URL and API key
-    └── requestUrls.js     # All TMDB endpoint paths
+Netflix-Clone/
+├── backend/                       # RESTful API Service (Node.js / Express)
+│   ├── config/
+│   │   └── db.js                  # MySQL Connection Pool + Resilient Fallback Engine
+│   ├── controllers/
+│   │   ├── authController.js      # JWT Authentication, Registration, Profile Management
+│   │   ├── movieController.js     # Gemini AI Recommendations & TMDB Proxy
+│   │   └── watchlistController.js # Cloud Watchlist CRUD Operations
+│   ├── middleware/
+│   │   └── auth.js                # JWT Bearer Token Verification
+│   ├── routes/
+│   │   ├── authRoutes.js          # /api/users endpoints
+│   │   ├── movieRoutes.js         # /api/movies endpoints
+│   │   └── index.js               # Central API Router
+│   ├── server.js                  # Express Entrypoint, Graceful Shutdown, CORS
+│   ├── package.json
+│   ├── .env
+│   └── .env.example
+│
+├── frontend/                      # Client Application (React 19 / Vite / CSS Modules)
+│   ├── src/
+│   │   ├── assets/                # Optimized SVGs, Posters, Badges
+│   │   ├── Components/            # Banner, Header, MovieCard, Modals, Sliders
+│   │   ├── context/               # MovieContext & Authentication State
+│   │   ├── Data/                  # Static Offline Fallbacks
+│   │   ├── pages/                 # Home, Movies, TV, News, MyList, Login, 404
+│   │   └── Utility/               # TMDB Axios Instance & Dynamic Request URLs
+│   ├── public/
+│   ├── index.html
+│   ├── vite.config.js             # Vite Config with Dev API Proxy
+│   ├── package.json
+│   ├── .env
+│   └── .env.example
+│
+├── vercel.json                    # Vercel Deployment Configuration
+├── render.yaml                    # Render Infrastructure-as-Code Blueprint
+├── package.json                   # Root Monorepo Orchestrator (Concurrent runner)
+└── README.md                      # Documentation
 ```
 
 ---
 
-## Getting Started
+## ✨ Features & Capabilities
+
+### Frontend
+- **Dynamic Hero Banner** — High-definition backdrop rotation with Play Trailer, More Info modal, and Watchlist toggle.
+- **Multi-Category Sliders** — Parallel fetching across TMDB categories (Trending, Netflix Originals, Top Rated, Action, Romance, etc.) using `Promise.allSettled`.
+- **Interactive Card Previews** — Hover zoom effect displaying match %, maturity ratings, dynamic genre pills, and quick action controls.
+- **YouTube Trailer Modal** — Instant high-resolution trailer playback with YouTube iframe embed and cinematic fallbacks.
+- **Movie Detail Modal** — Deep-dive modal revealing complete synopsis, cast, release dates, and related titles.
+- **Live Search & Filter** — Instant TMDB search with debouncing and multi-language filtering.
+- **Protected Routing** — Secured client routes requiring authentication, with seamless session persistence.
+
+### Backend & Cloud Architecture
+- **JWT Authentication** — BCrypt password hashing with signed JWTs (7-day validity).
+- **Persistent Cloud Watchlist** — Synchronizes user watchlists between MySQL and local state.
+- **Gemini AI Movie Recommendations** — Consumes user interaction history to generate intelligent suggestions via Google Gemini API, hydrated with live TMDB assets.
+- **Dual Database Resilience** — Automatically detects local/cloud MySQL database daemon; seamlessly falls back to persistent JSON storage if MySQL is offline.
+- **Production Server Readiness** — Environment-driven CORS, graceful shutdown handlers (`SIGTERM`, `SIGINT`), and standardized health checks.
+
+---
+
+## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
+- **Node.js** 18.0.0 or higher
+- **npm** 9.0.0 or higher
+- (Optional) **MySQL** server running locally
 
-- Node.js 18+
-- A free [TMDB API key](https://www.themoviedb.org/settings/api)
-
-### Installation
-
+### 1. Clone & Install Dependencies
 ```bash
-# 1. Clone the repository
-git clone <your-repo-url>
-cd movie-netflix-clone
+git clone https://github.com/Mussagit/Netflix-Clone.git
+cd Netflix-Clone
 
-# 2. Install dependencies
-npm install
+# Install root, backend, and frontend dependencies in one command
+npm run install:all
+```
 
-# 3. Set up environment variables
-cp .env.example .env
-# Edit .env and add your TMDB API key:
-# VITE_TMDB_API_KEY=your_api_key_here
+### 2. Configure Environment Variables
 
-# 4. Start the dev server
+**Backend (`backend/.env`):**
+```env
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=netflix_jwt_secret_key_2026_super_secure
+TMDB_API_KEY=1d81816c92e2a6b1b532b8a8d7c53480
+GEMINI_API_KEY=AIzaSyDummyGeminiKeyReplaceWithYoursIfAvailable
+
+# MySQL Database (Optional - will use dynamic engine if MySQL is unavailable)
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=netflix_db
+DB_PORT=3306
+```
+
+**Frontend (`frontend/.env`):**
+```env
+VITE_TMDB_API_KEY=1d81816c92e2a6b1b532b8a8d7c53480
+VITE_API_KEY=1d81816c92e2a6b1b532b8a8d7c53480
+VITE_BACKEND_URL=http://localhost:5000/api
+```
+
+### 3. Launch Both Servers Concurrently
+From the project root:
+```bash
 npm run dev
 ```
+- **Frontend**: [http://localhost:5173](http://localhost:5173)
+- **Backend API**: [http://localhost:5000/api](http://localhost:5000/api)
+- **Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+---
 
-### Available Scripts
+## 🚢 Production Deployment Guide
 
-| Script | Description |
+### Option A: Deploy on Vercel + Render (Recommended Free Setup)
+
+1. **Deploy Backend on Render**:
+   - Create a new **Web Service** on [Render](https://render.com).
+   - Point to your repository and set the **Root Directory** to `backend`.
+   - Build Command: `npm install`
+   - Start Command: `node server.js`
+   - Add environment variables (`JWT_SECRET`, `TMDB_API_KEY`, `NODE_ENV=production`).
+   - Copy your deployed backend URL (e.g., `https://netflix-api.onrender.com`).
+
+2. **Deploy Frontend on Vercel**:
+   - Import your repository on [Vercel](https://vercel.com).
+   - Set the **Root Directory** to `frontend`.
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Add Environment Variable:
+     - `VITE_BACKEND_URL`: `https://netflix-api.onrender.com/api`
+     - `VITE_TMDB_API_KEY`: `your_tmdb_key`
+   - Click **Deploy**!
+
+---
+
+### Option B: 1-Click Blueprint with `render.yaml`
+
+This repository includes a [`render.yaml`](./render.yaml) file. On Render, select **Blueprints** and connect your repository to spin up both the backend web service and the static frontend automatically.
+
+---
+
+### Monorepo Scripts Reference
+
+| Command | Action |
 |---|---|
-| `npm run dev` | Start development server with HMR |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run Oxlint |
+| `npm run dev` | Runs backend (5000) and frontend (5173) concurrently |
+| `npm run dev:frontend` | Starts only the Vite frontend dev server |
+| `npm run dev:backend` | Starts only the Express backend server with live reload |
+| `npm run build` | Builds the optimized production bundle in `frontend/dist` |
+| `npm run start` | Starts the production Node.js backend server |
+| `npm run lint` | Runs oxlint across the codebase for static analysis |
 
 ---
 
-## Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-VITE_TMDB_API_KEY=your_tmdb_api_key_here
-VITE_API_KEY=your_tmdb_api_key_here
-```
-
-> The `.env` file is git-ignored. See `.env.example` for the required variable name.
+## 🔒 Security Best Practices
+- Passwords hashed with salted **BCrypt**.
+- JWT session tokens transmitted via standardized **HTTP Bearer Authorization** headers.
+- Permissive CORS restricted to trusted frontend domains in production.
+- SQL injection prevention via parameterized queries throughout the relational engine.
 
 ---
 
-## API
-
-All data is fetched from the [TMDB API v3](https://api.themoviedb.org/3). The following endpoints are used:
-
-| Category | Endpoint |
-|---|---|
-| Trending | `/trending/all/week` |
-| Netflix Originals | `/discover/tv?with_networks=213` |
-| Top Rated | `/movie/top_rated` |
-| Action | `/discover/movie?with_genres=28` |
-| Comedy | `/discover/movie?with_genres=35` |
-| Horror | `/discover/movie?with_genres=27` |
-| Romance | `/discover/movie?with_genres=10749` |
-| Documentaries | `/discover/movie?with_genres=99` |
-
-The API key and `language=en-US` are automatically attached to every request via the shared Axios instance in `src/Utility/MovieInstance.js`.
-
----
-
-## Team
-
-| Task | Member |
-|---|---|
-| T-01 Project Scaffolding | Group |
-| T-02 Asset Organization | Group |
-| T-03 TMDB API Setup | Group |
-| T-04 Axios Instance & Endpoints | Yonatan |
-| T-05 Global Styles | Yonatan |
-| T-06 Router & Layout | Mo |
-| T-07 Header Scroll Behaviour | Ferdos |
-| T-08 Search, Notifications & Profile | Ferdos |
-| T-09 Footer | Mo |
-| T-10 Banner Data Fetching | Sadik |
-| T-11 Banner UI | Sadik |
-| T-12 Parallel Category Fetching | Mussa / Israal |
-| T-13 Swiper Carousel | Mussa / Israal |
-| T-14 MovieCard Hover Preview | Mussa / Israal |
-| T-15 Responsive Layout & Mobile Nav | Eyob |
-| T-16 CSS Audit & Animation Polish | Eyob |
-
----
-
-## License
-
-This project is for educational purposes only. All movie data and images are provided by [TMDB](https://www.themoviedb.org/). Netflix name and branding are trademarks of Netflix, Inc.
+## 📄 License
+This project is open-source and available under the **ISC License**.
