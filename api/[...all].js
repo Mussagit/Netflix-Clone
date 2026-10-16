@@ -1,2 +1,2 @@
-// Vercel Catch-All API Handler for root /api/*
-module.exports = require("./index.js");
+// Vercel Catch-All API Handler for /api/*
+export { default } from "./index.js";

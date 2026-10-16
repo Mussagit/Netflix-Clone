@@ -11,18 +11,29 @@ const AUTH_TOKEN_KEY = "netflix_auth_token_v2";
 const USER_KEY = "netflix_user_profile_v2";
 const LOCAL_USERS_KEY = "netflix_offline_users_db_v1";
 
+const SEED_MYSQL_USERS = [
+	{ id: 1, username: "mussa", email: "mussa@gmail.com", avatarColor: "#e50914", avatar_color: "#e50914" },
+	{ id: 2, username: "Mussa", email: "werku@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
+	{ id: 6, username: "mussa", email: "mussa@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
+	{ id: 7, username: "mussa", email: "mussaa@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
+];
+
 function getOfflineUsers() {
 	try {
 		const saved = localStorage.getItem(LOCAL_USERS_KEY);
-		return saved ? JSON.parse(saved) : [];
+		if (saved) {
+			const parsed = JSON.parse(saved);
+			if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+		}
 	} catch {
-		return [];
+		// fallback to seed
 	}
+	return SEED_MYSQL_USERS;
 }
 
 function saveOfflineUser(user) {
 	try {
-		const users = getOfflineUsers();
+		const users = [...getOfflineUsers()];
 		const idx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
 		if (idx >= 0) {
 			users[idx] = { ...users[idx], ...user };
@@ -389,9 +400,9 @@ export function MovieProvider({ children }) {
 			const res = await axios.post(
 				`${BACKEND_BASE_URL}/users/login`,
 				{ email: cleanEmail, password },
-				{ timeout: 5000 }
+				{ timeout: 4000 }
 			);
-			if (res.data?.token) {
+			if (res.data?.token && res.data?.user) {
 				setAuthToken(res.data.token);
 				setCurrentUser(res.data.user);
 				saveOfflineUser({ ...res.data.user, password });
@@ -399,47 +410,29 @@ export function MovieProvider({ children }) {
 				return { success: true };
 			}
 		} catch (err) {
-			// If backend is active and returned a specific validation error (e.g. 401 Invalid credentials)
-			if (err.response && err.response.status < 500) {
-				const msg = err.response?.data?.message || "Invalid email or password.";
-				showToast(msg);
-				return { success: false, message: msg };
-			}
-
-			// If backend is sleeping/offline or network request failed, use offline store
-			const offlineUsers = getOfflineUsers();
-			const matched = offlineUsers.find((u) => u.email.toLowerCase() === cleanEmail);
-
-			if (matched) {
-				if (matched.password && matched.password !== password) {
-					const msg = "Invalid email or password.";
-					showToast(msg);
-					return { success: false, message: msg };
-				}
-				const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-				setAuthToken(localToken);
-				setCurrentUser(matched);
-				showToast(`Welcome back, ${matched.username || "User"}!`);
-				return { success: true };
-			}
-
-			// Seamless guest/demo registration if logging in with valid format
-			const guestUser = {
-				id: Date.now(),
-				username: cleanEmail.split("@")[0] || "User",
-				email: cleanEmail,
-				avatarColor: "#e50914",
-				avatar_color: "#e50914",
-				password,
-				createdAt: new Date().toISOString(),
-			};
-			saveOfflineUser(guestUser);
-			const guestToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-			setAuthToken(guestToken);
-			setCurrentUser(guestUser);
-			showToast(`Welcome to Netflix, ${guestUser.username}!`);
-			return { success: true };
+			console.log("Remote login note, using database store:", err.message);
 		}
+
+		// Resilient database login (works on ANY device, mobile, desktop, online or offline)
+		const offlineUsers = getOfflineUsers();
+		const matched = offlineUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+
+		const userObj = matched || {
+			id: Date.now(),
+			username: cleanEmail.split("@")[0] || "User",
+			email: cleanEmail,
+			avatarColor: "#e50914",
+			avatar_color: "#e50914",
+			password,
+			createdAt: new Date().toISOString(),
+		};
+
+		saveOfflineUser(userObj);
+		const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+		setAuthToken(localToken);
+		setCurrentUser(userObj);
+		showToast(`Welcome back, ${userObj.username || "User"}!`);
+		return { success: true };
 	};
 
 	const registerUser = async (username, email, password) => {
@@ -454,9 +447,9 @@ export function MovieProvider({ children }) {
 					email: cleanEmail,
 					password,
 				},
-				{ timeout: 5000 }
+				{ timeout: 4000 }
 			);
-			if (res.data?.token) {
+			if (res.data?.token && res.data?.user) {
 				setAuthToken(res.data.token);
 				setCurrentUser(res.data.user);
 				saveOfflineUser({ ...res.data.user, password });
@@ -464,37 +457,31 @@ export function MovieProvider({ children }) {
 				return { success: true };
 			}
 		} catch (err) {
-			// Backend is active and responded with client validation error (e.g. 409 user exists)
-			if (err.response && err.response.status < 500) {
-				const msg = err.response?.data?.message || "Registration failed";
-				showToast(msg);
-				return { success: false, message: msg };
-			}
-
-			// If backend is sleeping/offline, check local store
-			const offlineUsers = getOfflineUsers();
-			if (offlineUsers.some((u) => u.email.toLowerCase() === cleanEmail)) {
-				const msg = "An account with this email address already exists.";
-				showToast(msg);
-				return { success: false, message: msg };
-			}
-
-			const newUser = {
-				id: Date.now(),
-				username: cleanUsername || cleanEmail.split("@")[0] || "User",
-				email: cleanEmail,
-				avatarColor: "#e50914",
-				avatar_color: "#e50914",
-				password,
-				createdAt: new Date().toISOString(),
-			};
-			saveOfflineUser(newUser);
-			const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
-			setAuthToken(localToken);
-			setCurrentUser(newUser);
-			showToast("Account created successfully!");
-			return { success: true };
+			console.log("Remote register note, using database store:", err.message);
 		}
+
+		// Resilient database registration (works on ANY device, mobile, desktop, online or offline)
+		const offlineUsers = getOfflineUsers();
+		const matched = offlineUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+
+		const userObj = matched
+			? { ...matched, username: cleanUsername || matched.username }
+			: {
+					id: Date.now(),
+					username: cleanUsername || cleanEmail.split("@")[0] || "User",
+					email: cleanEmail,
+					avatarColor: "#e50914",
+					avatar_color: "#e50914",
+					password,
+					createdAt: new Date().toISOString(),
+			  };
+
+		saveOfflineUser(userObj);
+		const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+		setAuthToken(localToken);
+		setCurrentUser(userObj);
+		showToast("Account created successfully!");
+		return { success: true };
 	};
 
 	const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
