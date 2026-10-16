@@ -7,13 +7,50 @@ export const TMDB_IMAGE_BASE = "https://image.tmdb.org/t/p/original";
 export const TMDB_POSTER_BASE = "https://image.tmdb.org/t/p/w500";
 export const TMDB_THUMBNAIL_BASE = "https://image.tmdb.org/t/p/w300";
 
-export const BACKEND_BASE_URL =
-	import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api";
+export function resolveBackendBaseUrl() {
+	const envUrl = import.meta.env.VITE_BACKEND_URL;
+	if (envUrl && typeof envUrl === "string" && envUrl.trim().length > 0) {
+		let clean = envUrl.trim();
+		// Automatically prepend https:// if protocol is omitted (common in hosting platforms like Render)
+		if (!clean.startsWith("http://") && !clean.startsWith("https://") && !clean.startsWith("/")) {
+			clean = `https://${clean}`;
+		}
+		// Ensure it points to /api endpoint
+		if (!clean.endsWith("/api") && !clean.endsWith("/api/")) {
+			clean = clean.replace(/\/+$/, "") + "/api";
+		}
+		return clean.replace(/\/+$/, "");
+	}
+
+	// Browser client-side detection
+	if (typeof window !== "undefined") {
+		const host = window.location.hostname;
+		const isLocalhost =
+			host === "localhost" ||
+			host === "127.0.0.1" ||
+			host.startsWith("192.168.") ||
+			host.startsWith("10.");
+
+		// In local development, communicate with local server
+		if (isLocalhost) {
+			return "http://localhost:5000/api";
+		}
+
+		// In production on any deployed domain (Vercel, Render, custom domain),
+		// use relative "/api" path so it operates on the same link without CORS or mixed content issues
+		return "/api";
+	}
+
+	return "http://localhost:5000/api";
+}
+
+export const BACKEND_BASE_URL = resolveBackendBaseUrl();
 export const BACKEND_ROOT_URL = BACKEND_BASE_URL.replace(/\/api\/?$/, "");
 
 const requests = {
 	apiKey: API_KEY,
 	backendBaseUrl: BACKEND_BASE_URL,
+	healthUrl: `${BACKEND_BASE_URL}/health`,
 	fetchAiRecommendations: `${BACKEND_BASE_URL}/movies/recommendations`,
 	postMoviePreference: `${BACKEND_BASE_URL}/movies/preferences`,
 	userWatchlistUrl: `${BACKEND_BASE_URL}/users/watchlist`,

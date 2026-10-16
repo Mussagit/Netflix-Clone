@@ -8,7 +8,14 @@ const DB_PASSWORD = process.env.DB_PASSWORD || "";
 const DB_NAME = process.env.DB_NAME || "netflix_db";
 const DB_PORT = parseInt(process.env.DB_PORT || "3306", 10);
 
-const localDbFile = path.join(__dirname, "..", "netflix.db.json");
+const isServerless = Boolean(
+	process.env.VERCEL ||
+	process.env.AWS_LAMBDA_FUNCTION_NAME ||
+	process.env.LAMBDA_TASK_ROOT
+);
+
+const seedDbFile = path.join(__dirname, "..", "netflix.db.json");
+const localDbFile = isServerless ? path.join("/tmp", "netflix.db.json") : seedDbFile;
 
 let mysqlPool = null;
 let useMysql = false;
@@ -21,20 +28,30 @@ let localStore = {
 	ratings: [],
 };
 
-if (fs.existsSync(localDbFile)) {
-	try {
+// Seed or load local storage
+try {
+	if (fs.existsSync(localDbFile)) {
 		const parsed = JSON.parse(fs.readFileSync(localDbFile, "utf-8"));
 		localStore = { ...localStore, ...parsed };
-	} catch {
-		// fresh store
+	} else if (fs.existsSync(seedDbFile)) {
+		const parsed = JSON.parse(fs.readFileSync(seedDbFile, "utf-8"));
+		localStore = { ...localStore, ...parsed };
+		if (isServerless) {
+			try {
+				fs.writeFileSync(localDbFile, JSON.stringify(localStore, null, 2), "utf-8");
+			} catch (_) {}
+		}
 	}
+} catch (err) {
+	console.log("Local store init note:", err.message);
 }
 
 function persistStore() {
 	try {
 		fs.writeFileSync(localDbFile, JSON.stringify(localStore, null, 2), "utf-8");
 	} catch (err) {
-		console.error("Local storage sync error:", err.message);
+		// In strictly read-only environments, keep state in memory without throwing
+		console.warn("Storage sync note:", err.message);
 	}
 }
 
@@ -61,14 +78,16 @@ function executeGenericSql(sql, params = []) {
 
 			rows = rows.filter((row) => {
 				for (const cond of conditions) {
-					const parts = cond.split("=");
+					const isNotEqual = cond.includes("!=") || cond.includes("<>");
+					const separator = isNotEqual ? (cond.includes("!=") ? "!=" : "<>") : "=";
+					const parts = cond.split(separator);
 					if (parts.length === 2) {
 						const col = parts[0].trim().toLowerCase();
 						const val = params[paramIdx++];
 						if (val !== undefined && val !== null) {
-							if (String(row[col] ?? "").toLowerCase() !== String(val).toLowerCase()) {
-								return false;
-							}
+							const matches = String(row[col] ?? "").toLowerCase() === String(val).toLowerCase();
+							if (isNotEqual && matches) return false;
+							if (!isNotEqual && !matches) return false;
 						}
 					}
 				}
@@ -219,19 +238,32 @@ function executeGenericSql(sql, params = []) {
 
 async function initializeDatabase() {
 	try {
-		mysqlPool = mysql.createPool({
-			host: DB_HOST,
-			user: DB_USER,
-			password: DB_PASSWORD,
-			database: DB_NAME,
-			port: DB_PORT,
-			waitForConnections: true,
-			connectionLimit: 10,
-			queueLimit: 0,
-		});
+		const connectionUri = process.env.DATABASE_URL || process.env.MYSQL_URL;
+
+		if (connectionUri) {
+			mysqlPool = mysql.createPool({
+				uri: connectionUri,
+				ssl: process.env.DB_SSL === "false" ? false : { rejectUnauthorized: false },
+				waitForConnections: true,
+				connectionLimit: 10,
+				queueLimit: 0,
+			});
+		} else {
+			mysqlPool = mysql.createPool({
+				host: DB_HOST,
+				user: DB_USER,
+				password: DB_PASSWORD,
+				database: DB_NAME,
+				port: DB_PORT,
+				ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+				waitForConnections: true,
+				connectionLimit: 10,
+				queueLimit: 0,
+			});
+		}
 
 		const connection = await mysqlPool.getConnection();
-		console.log(`✓ MySQL Database connected: [${DB_NAME}] | Host: [${DB_HOST}:${DB_PORT}]`);
+		console.log(`✓ MySQL Database connected successfully`);
 		useMysql = true;
 
 		// Create tables

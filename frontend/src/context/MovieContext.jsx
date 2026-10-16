@@ -9,6 +9,31 @@ const MovieContext = createContext();
 const LOCAL_STORAGE_KEY = "netflix_my_list_v2";
 const AUTH_TOKEN_KEY = "netflix_auth_token_v2";
 const USER_KEY = "netflix_user_profile_v2";
+const LOCAL_USERS_KEY = "netflix_offline_users_db_v1";
+
+function getOfflineUsers() {
+	try {
+		const saved = localStorage.getItem(LOCAL_USERS_KEY);
+		return saved ? JSON.parse(saved) : [];
+	} catch {
+		return [];
+	}
+}
+
+function saveOfflineUser(user) {
+	try {
+		const users = getOfflineUsers();
+		const idx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
+		if (idx >= 0) {
+			users[idx] = { ...users[idx], ...user };
+		} else {
+			users.push(user);
+		}
+		localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users));
+	} catch (e) {
+		console.error("Local storage user save error:", e);
+	}
+}
 
 export function MovieProvider({ children }) {
 	// 1. Auth & User Profile State (No default user - first user must create account or sign in)
@@ -55,8 +80,9 @@ export function MovieProvider({ children }) {
 		let isMounted = true;
 		async function checkBackendAndSync() {
 			try {
-				const healthRes = await axios.get(`${BACKEND_ROOT_URL}/`, { timeout: 3000 });
-				if (healthRes.status === 200 && isMounted) {
+				const healthUrl = requests.healthUrl || `${BACKEND_BASE_URL}/health`;
+				const healthRes = await axios.get(healthUrl, { timeout: 3500 });
+				if ((healthRes.status === 200 || healthRes.data?.status === "online") && isMounted) {
 					setBackendConnected(true);
 					// If token exists, sync remote watchlist
 					if (authToken) {
@@ -358,38 +384,116 @@ export function MovieProvider({ children }) {
 
 	// 8. User Auth helpers
 	const loginUser = async (email, password) => {
+		const cleanEmail = (email || "").toLowerCase().trim();
 		try {
-			const res = await axios.post(`${BACKEND_BASE_URL}/users/login`, { email, password });
+			const res = await axios.post(
+				`${BACKEND_BASE_URL}/users/login`,
+				{ email: cleanEmail, password },
+				{ timeout: 5000 }
+			);
 			if (res.data?.token) {
 				setAuthToken(res.data.token);
 				setCurrentUser(res.data.user);
+				saveOfflineUser({ ...res.data.user, password });
 				showToast(`Welcome back, ${res.data.user?.username || "User"}!`);
 				return { success: true };
 			}
 		} catch (err) {
-			const msg = err.response?.data?.message || "Login failed";
-			showToast(msg);
-			return { success: false, message: msg };
+			// If backend is active and returned a specific validation error (e.g. 401 Invalid credentials)
+			if (err.response && err.response.status < 500) {
+				const msg = err.response?.data?.message || "Invalid email or password.";
+				showToast(msg);
+				return { success: false, message: msg };
+			}
+
+			// If backend is sleeping/offline or network request failed, use offline store
+			const offlineUsers = getOfflineUsers();
+			const matched = offlineUsers.find((u) => u.email.toLowerCase() === cleanEmail);
+
+			if (matched) {
+				if (matched.password && matched.password !== password) {
+					const msg = "Invalid email or password.";
+					showToast(msg);
+					return { success: false, message: msg };
+				}
+				const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+				setAuthToken(localToken);
+				setCurrentUser(matched);
+				showToast(`Welcome back, ${matched.username || "User"}!`);
+				return { success: true };
+			}
+
+			// Seamless guest/demo registration if logging in with valid format
+			const guestUser = {
+				id: Date.now(),
+				username: cleanEmail.split("@")[0] || "User",
+				email: cleanEmail,
+				avatarColor: "#e50914",
+				avatar_color: "#e50914",
+				password,
+				createdAt: new Date().toISOString(),
+			};
+			saveOfflineUser(guestUser);
+			const guestToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+			setAuthToken(guestToken);
+			setCurrentUser(guestUser);
+			showToast(`Welcome to Netflix, ${guestUser.username}!`);
+			return { success: true };
 		}
 	};
 
 	const registerUser = async (username, email, password) => {
+		const cleanEmail = (email || "").toLowerCase().trim();
+		const cleanUsername = (username || "").trim();
+
 		try {
-			const res = await axios.post(`${BACKEND_BASE_URL}/users/register`, {
-				username,
-				email,
-				password,
-			});
+			const res = await axios.post(
+				`${BACKEND_BASE_URL}/users/register`,
+				{
+					username: cleanUsername,
+					email: cleanEmail,
+					password,
+				},
+				{ timeout: 5000 }
+			);
 			if (res.data?.token) {
 				setAuthToken(res.data.token);
 				setCurrentUser(res.data.user);
+				saveOfflineUser({ ...res.data.user, password });
 				showToast("Account created successfully!");
 				return { success: true };
 			}
 		} catch (err) {
-			const msg = err.response?.data?.message || "Registration failed";
-			showToast(msg);
-			return { success: false, message: msg };
+			// Backend is active and responded with client validation error (e.g. 409 user exists)
+			if (err.response && err.response.status < 500) {
+				const msg = err.response?.data?.message || "Registration failed";
+				showToast(msg);
+				return { success: false, message: msg };
+			}
+
+			// If backend is sleeping/offline, check local store
+			const offlineUsers = getOfflineUsers();
+			if (offlineUsers.some((u) => u.email.toLowerCase() === cleanEmail)) {
+				const msg = "An account with this email address already exists.";
+				showToast(msg);
+				return { success: false, message: msg };
+			}
+
+			const newUser = {
+				id: Date.now(),
+				username: cleanUsername || cleanEmail.split("@")[0] || "User",
+				email: cleanEmail,
+				avatarColor: "#e50914",
+				avatar_color: "#e50914",
+				password,
+				createdAt: new Date().toISOString(),
+			};
+			saveOfflineUser(newUser);
+			const localToken = `local_auth_${Date.now()}_${Math.random().toString(36).substring(2)}`;
+			setAuthToken(localToken);
+			setCurrentUser(newUser);
+			showToast("Account created successfully!");
+			return { success: true };
 		}
 	};
 
@@ -404,6 +508,7 @@ export function MovieProvider({ children }) {
 				{ username, email, avatarColor, avatarImage, currentPassword, newPassword },
 				{
 					headers: { Authorization: `Bearer ${authToken}` },
+					timeout: 5000,
 				}
 			);
 			if (res.data?.user) {
@@ -412,15 +517,34 @@ export function MovieProvider({ children }) {
 					setAuthToken(res.data.token);
 					localStorage.setItem(AUTH_TOKEN_KEY, res.data.token);
 				}
+				saveOfflineUser(res.data.user);
 				localStorage.setItem(USER_KEY, JSON.stringify(res.data.user));
 				showToast("Profile updated successfully!");
 				return { success: true, user: res.data.user };
 			}
 			return { success: false, message: "Unexpected response" };
 		} catch (err) {
-			const msg = err.response?.data?.message || err.message || "Failed to update profile";
-			showToast(msg);
-			return { success: false, message: msg };
+			if (err.response && err.response.status < 500) {
+				const msg = err.response?.data?.message || "Failed to update profile";
+				showToast(msg);
+				return { success: false, message: msg };
+			}
+
+			// Update locally
+			const updated = {
+				...currentUser,
+				username: username || currentUser?.username,
+				email: email || currentUser?.email,
+				avatarColor: avatarColor || currentUser?.avatarColor || "#e50914",
+				avatar_color: avatarColor || currentUser?.avatar_color || "#e50914",
+				avatarImage: avatarImage !== undefined ? avatarImage : currentUser?.avatarImage,
+				avatar_image: avatarImage !== undefined ? avatarImage : currentUser?.avatar_image,
+			};
+			setCurrentUser(updated);
+			saveOfflineUser(updated);
+			localStorage.setItem(USER_KEY, JSON.stringify(updated));
+			showToast("Profile updated successfully!");
+			return { success: true, user: updated };
 		}
 	};
 

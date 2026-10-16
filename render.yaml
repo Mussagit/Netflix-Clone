@@ -13,6 +13,8 @@ services:
         value: production
       - key: JWT_SECRET
         generateValue: true
+      - key: ALLOWED_ORIGINS
+        value: "*"
       - key: TMDB_API_KEY
         sync: false
       - key: GEMINI_API_KEY

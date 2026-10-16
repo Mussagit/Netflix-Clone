@@ -33,7 +33,7 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Health / Status Check Endpoint
-app.get(["/", "/health"], (req, res) => {
+app.get(["/", "/health", "/api/health", "/api"], (req, res) => {
 	res.status(200).json({
 		status: "online",
 		service: "Netflix 2026 Production Backend API",
@@ -79,42 +79,44 @@ app.use((err, req, res, _next) => {
 });
 
 // Server Initialization
-const server = app.listen(PORT, "0.0.0.0", () => {
-	console.log(`======================================================`);
-	console.log(`🎬 Netflix Clone Backend Server Active`);
-	console.log(`⚡ Environment: [${NODE_ENV}]`);
-	console.log(`🌐 Port: http://localhost:${PORT}`);
-	console.log(`💚 Health Check: http://localhost:${PORT}/health`);
-	console.log(`🚀 API Base URL: http://localhost:${PORT}/api`);
-	console.log(`======================================================`);
-});
+if (require.main === module) {
+	const server = app.listen(PORT, "0.0.0.0", () => {
+		console.log(`======================================================`);
+		console.log(`🎬 Netflix Clone Backend Server Active`);
+		console.log(`⚡ Environment: [${NODE_ENV}]`);
+		console.log(`🌐 Port: http://localhost:${PORT}`);
+		console.log(`💚 Health Check: http://localhost:${PORT}/health`);
+		console.log(`🚀 API Base URL: http://localhost:${PORT}/api`);
+		console.log(`======================================================`);
+	});
 
-server.on("error", (err) => {
-	if (err.code === "EADDRINUSE") {
-		console.error(`\n⚠️  Port ${PORT} is currently in use.`);
-		console.error(`👉 Terminate the process using port ${PORT} or configure a different PORT in .env\n`);
-	} else {
-		console.error("Server execution error:", err);
-	}
-});
-
-// Graceful Shutdown
-const gracefulShutdown = (signal) => {
-	console.log(`\nReceived ${signal}. Shutting down gracefully...`);
-	server.close(() => {
-		console.log("HTTP server closed.");
-		if (db.pool) {
-			db.pool.end().then(() => {
-				console.log("Database connection pool closed.");
-				process.exit(0);
-			});
+	server.on("error", (err) => {
+		if (err.code === "EADDRINUSE") {
+			console.error(`\n⚠️  Port ${PORT} is currently in use.`);
+			console.error(`👉 Terminate the process using port ${PORT} or configure a different PORT in .env\n`);
 		} else {
-			process.exit(0);
+			console.error("Server execution error:", err);
 		}
 	});
-};
 
-process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+	// Graceful Shutdown
+	const gracefulShutdown = (signal) => {
+		console.log(`\nReceived ${signal}. Shutting down gracefully...`);
+		server.close(() => {
+			console.log("HTTP server closed.");
+			if (db.pool) {
+				db.pool.end().then(() => {
+					console.log("Database connection pool closed.");
+					process.exit(0);
+				});
+			} else {
+				process.exit(0);
+			}
+		});
+	};
+
+	process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+	process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+}
 
 module.exports = app;
