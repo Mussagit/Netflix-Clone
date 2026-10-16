@@ -122,7 +122,7 @@ async function getMysqlPool() {
 }
 
 // Initialize MySQL check in background
-getMysqlPool().catch(() => {});
+getMysqlPool().catch(() => { });
 
 // Dynamic Password Hashing & Verification
 export function hashPassword(password, salt = "netflix_dynamic_salt_2026") {
