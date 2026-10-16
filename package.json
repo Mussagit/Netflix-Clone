@@ -12,6 +12,7 @@
     "start": "npm start --prefix backend",
     "start:backend": "npm start --prefix backend",
     "install:all": "npm install --prefix frontend && npm install --prefix backend",
+    "postinstall": "npm install --prefix frontend",
     "lint": "npm run lint --prefix frontend"
   },
   "devDependencies": {
