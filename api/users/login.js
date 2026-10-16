@@ -18,10 +18,10 @@ export default async function handler(req, res) {
 	}
 
 	const cleanEmail = email.toLowerCase().trim();
-	let user = findUserByEmail(cleanEmail);
+	let user = await findUserByEmail(cleanEmail);
 
 	if (!user) {
-		user = createUser(cleanEmail.split("@")[0] || "User", cleanEmail, password);
+		user = await createUser(cleanEmail.split("@")[0] || "User", cleanEmail, password);
 	}
 
 	const token = createJwt(user);
@@ -29,6 +29,13 @@ export default async function handler(req, res) {
 		success: true,
 		message: "Login successful.",
 		token,
-		user,
+		user: {
+			id: user.id,
+			username: user.username,
+			email: user.email,
+			avatarColor: user.avatar_color || user.avatarColor || "#e50914",
+			avatar_color: user.avatar_color || user.avatarColor || "#e50914",
+			avatarImage: user.avatar_image || user.avatarImage || null,
+		},
 	});
 }

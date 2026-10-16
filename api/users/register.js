@@ -18,26 +18,40 @@ export default async function handler(req, res) {
 	}
 
 	const cleanEmail = email.toLowerCase().trim();
-	const existing = findUserByEmail(cleanEmail);
+	const existing = await findUserByEmail(cleanEmail);
 
 	if (existing) {
-		// Existing account: seamlessly authenticate
+		// Existing account: authenticate dynamically
 		const token = createJwt(existing);
 		return sendJson(res, 200, {
 			success: true,
-			message: "Welcome back!",
+			message: "Account already exists. Welcome back!",
 			token,
-			user: existing,
+			user: {
+				id: existing.id,
+				username: existing.username,
+				email: existing.email,
+				avatarColor: existing.avatar_color || existing.avatarColor || "#e50914",
+				avatar_color: existing.avatar_color || existing.avatarColor || "#e50914",
+				avatarImage: existing.avatar_image || existing.avatarImage || null,
+			},
 		});
 	}
 
-	const user = createUser(username, cleanEmail, password);
-	const token = createJwt(user);
+	const newUser = await createUser(username, cleanEmail, password);
+	const token = createJwt(newUser);
 
 	return sendJson(res, 201, {
 		success: true,
 		message: "User registered successfully.",
 		token,
-		user,
+		user: {
+			id: newUser.id,
+			username: newUser.username,
+			email: newUser.email,
+			avatarColor: newUser.avatar_color || newUser.avatarColor || "#e50914",
+			avatar_color: newUser.avatar_color || newUser.avatarColor || "#e50914",
+			avatarImage: newUser.avatar_image || newUser.avatarImage || null,
+		},
 	});
 }

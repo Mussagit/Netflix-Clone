@@ -9,26 +9,19 @@ const MovieContext = createContext();
 const LOCAL_STORAGE_KEY = "netflix_my_list_v2";
 const AUTH_TOKEN_KEY = "netflix_auth_token_v2";
 const USER_KEY = "netflix_user_profile_v2";
-const LOCAL_USERS_KEY = "netflix_offline_users_db_v1";
-
-const SEED_MYSQL_USERS = [
-	{ id: 1, username: "mussa", email: "mussa@gmail.com", avatarColor: "#e50914", avatar_color: "#e50914" },
-	{ id: 2, username: "Mussa", email: "werku@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
-	{ id: 6, username: "mussa", email: "mussa@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
-	{ id: 7, username: "mussa", email: "mussaa@example.com", avatarColor: "#e50914", avatar_color: "#e50914" },
-];
+const LOCAL_USERS_KEY = "netflix_dynamic_users_db_v2";
 
 function getOfflineUsers() {
 	try {
 		const saved = localStorage.getItem(LOCAL_USERS_KEY);
 		if (saved) {
 			const parsed = JSON.parse(saved);
-			if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+			if (Array.isArray(parsed)) return parsed;
 		}
 	} catch {
-		// fallback to seed
+		// fallback
 	}
-	return SEED_MYSQL_USERS;
+	return [];
 }
 
 function saveOfflineUser(user) {

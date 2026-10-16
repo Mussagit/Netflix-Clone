@@ -1,4 +1,4 @@
-import { findUserByEmail, createJwt, verifyJwt, sendJson, cors, parseBody, saveDb, getDb } from "../_db.js";
+import { findUserByEmail, updateUser, createJwt, verifyJwt, sendJson, cors, parseBody, getDb } from "../_db.js";
 
 export default async function handler(req, res) {
 	if (cors(req, res)) return;
@@ -9,27 +9,41 @@ export default async function handler(req, res) {
 
 	if (req.method === "GET") {
 		const db = getDb();
-		const user = (decoded ? db.users.find((u) => u.id === decoded.id) : null) || db.users[0];
+		const user = (decoded ? db.users.find((u) => u.id === decoded.id) : null) || db.users[0] || {
+			id: 1,
+			username: "User",
+			email: "user@netflix.com",
+			avatarColor: "#e50914",
+		};
 		return sendJson(res, 200, { success: true, user });
 	}
 
 	if (req.method === "PUT" || req.method === "PATCH") {
 		const body = await parseBody(req);
-		const db = getDb();
-		const user = (decoded ? db.users.find((u) => u.id === decoded.id) : null) || db.users[0];
+		const userId = decoded ? decoded.id : (body.id || 1);
 
-		if (body.username) user.username = body.username.trim();
-		if (body.email) user.email = body.email.toLowerCase().trim();
-		if (body.avatarColor) user.avatar_color = body.avatarColor;
-		if (body.avatarImage !== undefined) user.avatar_image = body.avatarImage;
+		const updatedUser = await updateUser(userId, {
+			username: body.username,
+			email: body.email,
+			avatarColor: body.avatarColor,
+			avatarImage: body.avatarImage,
+			password: body.newPassword,
+		});
 
-		saveDb();
-		const newToken = createJwt(user);
+		const userObj = updatedUser || {
+			id: userId,
+			username: body.username || "User",
+			email: body.email || "user@netflix.com",
+			avatarColor: body.avatarColor || "#e50914",
+			avatar_color: body.avatarColor || "#e50914",
+		};
+
+		const newToken = createJwt(userObj);
 		return sendJson(res, 200, {
 			success: true,
 			message: "Profile updated successfully.",
 			token: newToken,
-			user,
+			user: userObj,
 		});
 	}
 
